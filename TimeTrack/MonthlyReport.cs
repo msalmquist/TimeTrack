@@ -17,6 +17,9 @@ namespace TimeTrack
             StreamWriter sw = new StreamWriter(savePath);
             foreach (var t in tasklist)
             {
+                // skip over time records (records containing time remaining information)
+                if (t.TaskSummary.ToLower().IndexOf(TaskRecord.TimeRecordText) == 0) continue;
+
                string datestring = t.GetDateString();
                sw.WriteLine(string.Format(lineFormat,
                             datestring,

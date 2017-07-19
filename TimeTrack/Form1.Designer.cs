@@ -47,6 +47,7 @@
             this.setTaskFilePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTaskFileContentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewTimeRemainingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -169,6 +170,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.PaleTurquoise;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -181,10 +183,10 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generateReportToolStripMenuItem,
+            this.viewTimeRemainingToolStripMenuItem,
             this.showTaskFileContentsToolStripMenuItem,
             this.setTaskFilePathToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
@@ -198,7 +200,6 @@
             // generateReportToolStripMenuItem
             // 
             this.generateReportToolStripMenuItem.Name = "generateReportToolStripMenuItem";
-            this.generateReportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
             this.generateReportToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.generateReportToolStripMenuItem.Text = "Generate &Report";
             this.generateReportToolStripMenuItem.Click += new System.EventHandler(this.generateReportToolStripMenuItem_Click);
@@ -209,6 +210,13 @@
             this.showTaskFileContentsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.showTaskFileContentsToolStripMenuItem.Text = "&View Task File Contents";
             this.showTaskFileContentsToolStripMenuItem.Click += new System.EventHandler(this.showTaskFileContentsToolStripMenuItem_Click);
+            // 
+            // viewTimeRemainingToolStripMenuItem
+            // 
+            this.viewTimeRemainingToolStripMenuItem.Name = "viewTimeRemainingToolStripMenuItem";
+            this.viewTimeRemainingToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.viewTimeRemainingToolStripMenuItem.Text = "View Time Remaining";
+            this.viewTimeRemainingToolStripMenuItem.Click += new System.EventHandler(this.viewTimeRemainingToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -265,6 +273,7 @@
         private System.Windows.Forms.ToolStripMenuItem setTaskFilePathToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateReportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showTaskFileContentsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewTimeRemainingToolStripMenuItem;
     }
 }
 

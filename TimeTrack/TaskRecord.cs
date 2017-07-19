@@ -10,6 +10,8 @@ namespace TimeTrack
         public string TaskSummary = "";
         public string Description = "";
         public string ForWho = "";
+        public static readonly string TimeRecordText = "time"; // input in the task summary to log amount of time remaining, usually put in at the beginning of some time period
+
 
         public string GetDateString()
         {

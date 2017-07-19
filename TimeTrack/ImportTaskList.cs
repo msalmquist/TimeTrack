@@ -63,7 +63,7 @@ namespace TimeTrack
             return _listOfMonthsRepresented;
         }
 
-        public decimal GetTotalHours (List<TaskRecord> tasks)
+        public decimal GetTotalHours (List<TaskRecord> tasks/*, string forWhoFilter*/)
         {
 
             decimal totalHours = 0.0m;
@@ -71,9 +71,18 @@ namespace TimeTrack
             // walk through and total hours
             foreach (var t in tasks)
             {
+
                 if (string.IsNullOrEmpty(t.TaskSummary) && string.IsNullOrEmpty(t.Description)) continue; // essentially an empty record
 
-                if (decimal.TryParse(t.Hours, out tempHours))
+                //if (forWhoFilter == null && t.ForWho == forWhoFilter) continue;
+                                              
+                if (t.TaskSummary.ToLower().IndexOf(TaskRecord.TimeRecordText) == 0)
+                {
+                    // TBD--adjust hours available based on time record
+                    continue;
+                }
+
+                    if (decimal.TryParse(t.Hours, out tempHours))
                 {
                     totalHours += tempHours;
                 }
