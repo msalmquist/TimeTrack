@@ -17,13 +17,13 @@ namespace TimeTrack
 
         }
 
-        private readonly string _fileName = "TasksLog.csv";
+        private readonly string _taskFileName = "TasksLog.csv";
         private readonly string _projectListFile = "projectlist.txt";
         private readonly string _lockFileName = "TasksLog.locked";
 
         private string GetTrackFilePath()
         {
-            return Properties.Settings.Default.FilePath + Path.DirectorySeparatorChar + _fileName;
+            return Properties.Settings.Default.FilePath + Path.DirectorySeparatorChar + _taskFileName;
         } // end ()
 
         private string GetProjectListFilePath()
@@ -45,27 +45,29 @@ namespace TimeTrack
             {
                 this.Close();
             }
-
-            string path = GetTrackFilePath();
-            bool gotlock = GetLock();
-            if (gotlock)
-            {
-                bool fileExists = System.IO.File.Exists(path);
-                TaskRecord tr = new TaskRecord();
-                tr.Date = TaskDate;
-                tr.Hours = textBoxHours.Text;
-                tr.TaskSummary = textBoxTaskName.Text;
-                tr.Description = textBoxDescription.Text;
-                tr.ForWho = listBox1.SelectedItem.ToString();
-                WriteCvs wcvs = new WriteCvs();
-                wcvs.Write(tr, path);
-
-                ReleaseLock();
-                this.Close();
-            }
             else
             {
-                MessageBox.Show("The task records are currently locked.", "Lock Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string path = GetTrackFilePath();
+                bool gotlock = GetLock();
+                if (gotlock)
+                {
+                    bool fileExists = System.IO.File.Exists(path);
+                    TaskRecord tr = new TaskRecord();
+                    tr.Date = TaskDate;
+                    tr.Hours = textBoxHours.Text;
+                    tr.TaskSummary = textBoxTaskName.Text;
+                    tr.Description = textBoxDescription.Text;
+                    tr.ForWho = listBox1.SelectedItem.ToString();
+                    WriteCvs wcvs = new WriteCvs();
+                    wcvs.Write(tr, path);
+
+                    ReleaseLock();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("The task records are currently locked.", "Lock Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
         }
 
@@ -86,6 +88,11 @@ namespace TimeTrack
             }
 
             LoadProjectList();
+            if (listBox1.Items.Count == 0)
+            {
+                MessageBox.Show("There are no projects/task categories defined yet.\nYou need to add at least one.", "No Projects/Categories Found", MessageBoxButtons.OK);
+                AddNewProjectCategory();
+            }
             listBox1.SelectedIndex = 0;
             GetDateStringFromPicker();
         }
@@ -185,10 +192,15 @@ namespace TimeTrack
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            AddNewProjectCategory();
+        }// end ()
+
+        private void AddNewProjectCategory()
+        {
             DlgGenericTextEntry dgte = new DlgGenericTextEntry();
             dgte.Title = "Add Project Category";
             DialogResult dr = dgte.ShowDialog();
-            if(dr != DialogResult.Cancel)
+            if (dr != DialogResult.Cancel)
             {
                 var projFile = GetProjectListFilePath();
                 StreamWriter sw = new StreamWriter(projFile, true, Encoding.ASCII);
@@ -197,8 +209,7 @@ namespace TimeTrack
                 listBox1.Items.Add(dgte.TextEntry);
                 listBox1.SelectedIndex = listBox1.FindString(dgte.TextEntry);
             }
-        }// end ()
-
+        }
         private bool GetLock()
         {
             string lockfile = GetLockFilePath();
@@ -325,6 +336,28 @@ namespace TimeTrack
                 string msg = string.Format("Unable to calculate remaining hours under the {0} category.", selectedForWho);
                 MessageBox.Show(msg, selectedForWho + " Hours Remaining", MessageBoxButtons.OK);
             }
+        }
+
+        private string GetBackupFilePath()
+        {
+            string bkupDir = Properties.Settings.Default.FilePath + Path.DirectorySeparatorChar + "Backups";
+            if (!Directory.Exists(bkupDir)) Directory.CreateDirectory(bkupDir);
+            DateTime dt = DateTime.Now;
+            string ext = Path.GetExtension(_taskFileName);
+            string suffix = string.Format("_backup_{0}{1}{2}{3}",
+                                    dt.Day.ToString(), 
+                                    dt.ToString("MMMM"), 
+                                    dt.Year,
+                                    ext);
+            return bkupDir + Path.DirectorySeparatorChar + _taskFileName.Replace(ext, suffix);
+        }
+
+        private void doToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string bkupFile = GetBackupFilePath();
+            string srcFile = GetTrackFilePath();
+            File.Copy(srcFile, bkupFile, true);
+            MessageBox.Show(Path.GetFileName(srcFile) + " backed up to " + Path.GetFileName(bkupFile) + ".", "Backup Completed", MessageBoxButtons.OK);
         }
     }
 }
